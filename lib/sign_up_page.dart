@@ -1,8 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:sign_in_up/auth/auth_service.dart';
 import 'sign_in_page.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
+
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  final _emailController = TextEditingController();
+
+  final _passwordController = TextEditingController();
+
+  final _confirmPassController = TextEditingController();
+
+  final authService = AuthService();
+
+  void signUp() async {
+    final email = _emailController.text;
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPassController.text;
+
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Password don't match!")));
+      return;
+    }
+    try {
+      await authService.signUpWithEmailPassword(email, password);
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Registration Successful")));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Registration Successful")));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,17 +79,19 @@ class SignUpPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Colors.purple,
+                      color: Colors.deepPurple,
                     ),
                   ),
                   const SizedBox(height: 30),
 
                   //mailbox
                   TextField(
+                    controller: _emailController,
                     decoration: InputDecoration(
                       hintText: "Email",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.black),
                       ),
                     ),
                   ),
@@ -56,6 +99,7 @@ class SignUpPage extends StatelessWidget {
 
                   //pass
                   TextField(
+                    controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: "Password",
@@ -68,6 +112,7 @@ class SignUpPage extends StatelessWidget {
 
                   //cnfrm pass
                   TextField(
+                    controller: _confirmPassController,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: "Confirm Password",
@@ -83,13 +128,13 @@ class SignUpPage extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purple,
+                        backgroundColor: Colors.deepPurple,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 15),
                       ),
-                      onPressed: () {},
+                      onPressed: signUp,
                       child: const Text("Sign Up"),
                     ),
                   ),
@@ -107,7 +152,7 @@ class SignUpPage extends StatelessWidget {
                         child: const Text(
                           "Sign In",
                           style: TextStyle(
-                            color: Colors.purple,
+                            color: Colors.deepPurple,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
