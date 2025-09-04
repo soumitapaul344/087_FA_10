@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sign_in_up/page/node_page.dart';
+import 'package:sign_in_up/sign_in_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'sign_in_page.dart';
+//import 'sign_in_page.dart';
 
 void main() async {
   await Supabase.initialize(
